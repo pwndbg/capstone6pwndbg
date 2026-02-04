@@ -1,0 +1,30 @@
+diff --git a/bindings/python/setup.py b/bindings/python/setup.py
+index 2d820132..88192862 100755
+--- a/bindings/python/setup.py
++++ b/bindings/python/setup.py
+@@ -181,9 +181,9 @@ class CustomBuild(build_py):
+ 
+ 
+ setup(
+-    provides=['capstone'],
+-    packages=['capstone'],
+-    name='capstone',
++    provides=['capstone6pwndbg'],
++    packages=['capstone6pwndbg'],
++    name='capstone6pwndbg',
+     version=VERSION,
+     author='Nguyen Anh Quynh',
+     author_email='aquynh@gmail.com',
+@@ -202,8 +202,11 @@ setup(
+         'Programming Language :: Python :: 3.13',
+     ],
+     cmdclass={'build_py': CustomBuild, 'sdist': CustomSDist},
++    package_dir={
++        'capstone6pwndbg': 'capstone',
++    },
+     package_data={
+-        "capstone": ["lib/*", "include/capstone/*"],
++        "capstone6pwndbg": ["lib/*", "include/capstone/*"],
+     },
+     has_ext_modules=lambda: True,  # It's not a Pure Python wheel
+     # to have ABI3 tagged wheel

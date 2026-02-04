@@ -1,0 +1,35 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [
+          ubuntu-latest,
+          ubuntu-24.04-arm,
+          macos-15-intel,
+          macos-15
+        ]
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    environment:
+      name: pypi
+      url: https://pypi.org/p/capstone6pwndbg
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing on pypi
+    steps:
+
+    - name: Install uv and setup the python version
+      uses: astral-sh/setup-uv@v7
+
+    - name: build & publish
+      run: |
+        ./pypi.sh
