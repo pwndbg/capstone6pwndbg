@@ -10,5 +10,5 @@ popd
 
 pushd ./capstone/bindings/python
   uv build
-  # uv publish
+  uv publish
 popd
