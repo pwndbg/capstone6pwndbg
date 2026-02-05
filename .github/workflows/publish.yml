@@ -31,7 +31,7 @@ jobs:
           cd ./capstone && git apply ../python-rename.patch && cd ..
           
           uv run --with cibuildwheel==3.3.1 cibuildwheel --output-dir dist ./capstone/bindings/python
-          uv run twine upload --skip-existing dist/*.whl
+          uv tool run twine upload --skip-existing dist/*.whl
 
   sdist:
     name: Build source distribution
