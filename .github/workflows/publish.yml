@@ -30,8 +30,7 @@ jobs:
           git submodule update --init --recursive
           cd ./capstone && git apply ../python-rename.patch && cd ..
           
-          cd ./capstone/bindings/python
-          uv run --with cibuildwheel==3.3.1 cibuildwheel --output-dir dist
+          uv run --with cibuildwheel==3.3.1 cibuildwheel --output-dir dist ./capstone/bindings/python
 
   sdist:
     name: Build source distribution
@@ -51,6 +50,5 @@ jobs:
           git submodule update --init --recursive
           cd ./capstone && git apply ../python-rename.patch && cd ..
           
-          cd ./capstone/bindings/python
-          uv build --sdist
+          uv build --sdist ./capstone/bindings/python
           uv publish
