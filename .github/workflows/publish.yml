@@ -7,18 +7,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  wheels:
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [
-          ubuntu-latest,
-          ubuntu-24.04-arm,
-          macos-15-intel,
-          macos-15
-        ]
+        os: [ ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-latest ]
 
-    runs-on: ${{ matrix.os }}
     timeout-minutes: 120
     environment:
       name: pypi
@@ -26,11 +21,36 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing on pypi
     steps:
+      - uses: actions/checkout@v3
+      - name: Install uv and setup the python version
+        uses: astral-sh/setup-uv@v7
 
-    - uses: actions/checkout@v3
-    - name: Install uv and setup the python version
-      uses: astral-sh/setup-uv@v7
+      - name: build & publish
+        run: |
+          git submodule update --init --recursive
+          cd ./capstone && git apply ../python-rename.patch && cd ..
+          
+          cd ./capstone/bindings/python
+          uv run --with cibuildwheel==3.3.1 cibuildwheel --output-dir dist
 
-    - name: build & publish
-      run: |
-        ./pypi.sh
+  sdist:
+    name: Build source distribution
+    runs-on: ubuntu-24.04-arm
+    environment:
+      name: pypi
+      url: https://pypi.org/p/capstone6pwndbg
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing on pypi
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install uv and setup the python version
+        uses: astral-sh/setup-uv@v7
+
+      - name: build & publish
+        run: |
+          git submodule update --init --recursive
+          cd ./capstone && git apply ../python-rename.patch && cd ..
+          
+          cd ./capstone/bindings/python
+          uv build --no-binary
+          uv publish
