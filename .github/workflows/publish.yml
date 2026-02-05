@@ -50,5 +50,5 @@ jobs:
           git submodule update --init --recursive
           cd ./capstone && git apply ../python-rename.patch && cd ..
           
-          uv build --sdist ./capstone/bindings/python
+          uv build --out-dir dist --sdist ./capstone/bindings/python
           uv publish
