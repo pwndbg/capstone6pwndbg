@@ -52,5 +52,5 @@ jobs:
           cd ./capstone && git apply ../python-rename.patch && cd ..
           
           cd ./capstone/bindings/python
-          uv build --no-binary
+          uv build --sdist
           uv publish
